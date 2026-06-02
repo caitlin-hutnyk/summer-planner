@@ -72,12 +72,10 @@
   .evbar {
     margin: 1px 4px; border-radius: 7px; font-size: 11.5px; line-height: 1.5;
     padding: 1px 8px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    cursor: pointer; z-index: 2; align-self: center; font-weight: 600;
+    z-index: 2; align-self: center; font-weight: 600;
   }
-  .evbar:hover { filter: brightness(0.94); }
   .evbar.clipL { border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: 0; }
   .evbar.clipR { border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0; }
-  .evbar.sel { outline: 2px solid var(--ink); outline-offset: 1px; }
 
   .ev-music    { background: var(--music); }
   .ev-family   { background: var(--family); }
@@ -93,7 +91,6 @@
   .ev-social.tentative   { color: var(--social); }
   .ev-travel.tentative   { color: var(--away); }
   .ev-sports.tentative   { color: var(--sports); }
-  .evbar.fest { background: repeating-linear-gradient(45deg, #f3ebff, #f3ebff 5px, #e7d6ff 5px, #e7d6ff 10px); color: #6a3bbf; border: 1.5px dashed #b794f4; font-weight: 700; padding: 0 7px; }
   .evbar.ongoing { background: transparent !important; border: none; border-bottom: 1.5px solid currentColor; border-radius: 0; margin: 0 4px 2px; padding: 0 3px; font-style: italic; font-weight: 400; }
   .ev-music.ongoing    { color: var(--music); }
   .ev-family.ongoing   { color: var(--family); }
@@ -102,68 +99,6 @@
   .ev-travel.ongoing   { color: var(--away); }
   .ev-sports.ongoing   { color: var(--sports); }
 
-  /* detail panel */
-  .detail {
-    background: rgba(255,255,255,0.86); border: 1px solid rgba(255,255,255,0.9);
-    border-radius: 16px; padding: 16px 20px; box-shadow: var(--shadow); margin-top: 4px; min-height: 96px;
-  }
-  .detail .empty { color: var(--ink-soft); font-size: 13.5px; }
-  .detail .d-date { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
-  .detail .d-title { font-size: 19px; font-weight: 700; margin: 2px 0 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .badge { font-size: 10.5px; font-weight: 700; letter-spacing: .4px; padding: 3px 9px; border-radius: 999px; text-transform: uppercase; }
-  .badge.free { color: var(--free); background: var(--free-bg); }
-  .badge.tentative { color: var(--tentative); background: var(--tentative-bg); }
-  .badge.confirmed { color: var(--ink-soft); background: #f3f3f7; }
-  .badge.travel { color: var(--travel); background: #deeafc; }
-  .badge.fest { color: #6a3bbf; background: #efe6ff; }
-  .detail .hint { font-size: 12.5px; color: var(--ink-soft); line-height: 1.45; margin: 0; }
-  .d-note {
-    width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px;
-    font: inherit; font-size: 13px; resize: none; outline: none; color: var(--ink); background: #fff;
-  }
-  .d-note:focus { border-color: #c9c9da; }
-  .d-actions { margin-top: 10px; display: flex; gap: 10px; align-items: center; }
-  .btn {
-    border: 1px solid var(--line); background: #fff; border-radius: 9px;
-    padding: 7px 14px; font: inherit; font-size: 13px; cursor: pointer; color: var(--ink); font-weight: 600;
-  }
-  .btn:hover { background: #f5f5fa; }
-  .btn.go { background: var(--free); border-color: var(--free); color: #fff; }
-  .btn.go:hover { filter: brightness(0.95); background: var(--free); }
-  .btn.undo { color: var(--tentative); border-color: var(--tentative-bg); }
-
-  /* planning area */
-  .planning { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
-  .panel {
-    background: rgba(255,255,255,0.82); border: 1px solid rgba(255,255,255,0.9);
-    border-radius: 16px; padding: 18px 20px; box-shadow: var(--shadow);
-  }
-  .panel h3 { margin: 0 0 4px; font-size: 17px; }
-  .panel .hint { font-size: 12.5px; color: var(--ink-soft); margin: 0 0 14px; }
-  .wish { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
-  .wish:last-child { border-bottom: none; }
-  .wish .ico { font-size: 22px; width: 30px; text-align: center; }
-  .wish .body { flex: 1; min-width: 0; }
-  .wish .name { font-weight: 600; font-size: 14.5px; }
-  .wish .meta { font-size: 12px; color: var(--ink-soft); }
-  .wish .ctrl { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  .counter { display: flex; align-items: center; gap: 6px; }
-  .counter button { width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--line); background: #fff; font-size: 16px; cursor: pointer; line-height: 1; color: var(--ink); }
-  .counter button:hover { background: #f5f5fa; }
-  .counter .val { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 13.5px; min-width: 44px; text-align: center; }
-  .chk { width: 20px; height: 20px; accent-color: var(--free); cursor: pointer; }
-  .tag { font-size: 11px; font-weight: 700; color: var(--social); background: rgba(166,136,200,0.15); padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
-  .insight { display: flex; gap: 10px; padding: 9px 0; font-size: 13px; }
-  .insight:not(:last-child) { border-bottom: 1px solid var(--line); }
-  .insight .mark { flex-shrink: 0; }
-
-  footer { margin-top: 24px; display: flex; align-items: center; gap: 14px; font-size: 12.5px; color: var(--ink-soft); }
-  footer button { border: 1px solid var(--line); background: #fff; border-radius: 9px; padding: 7px 13px; font: inherit; font-size: 12.5px; cursor: pointer; color: var(--ink); }
-  footer button:hover { background: #f5f5fa; }
-
-  @media (max-width: 720px) {
-    .planning { grid-template-columns: 1fr; }
-  }
   @media (max-width: 560px) {
     body { -webkit-text-size-adjust: 100%; }
     .wrap { padding: 14px 9px 44px; }
@@ -182,18 +117,6 @@
     .month-tag { font-size: 8px; padding-left: 3px; letter-spacing: .3px; }
     .holiday-name { font-size: 7px; letter-spacing: 0; }
     .evbar { font-size: 8.5px; padding: 0 3px; margin: 1px 1.5px; border-radius: 5px; line-height: 1.5; }
-    .detail { padding: 13px 14px; border-radius: 13px; }
-    .detail .d-title { font-size: 16px; gap: 7px; }
-    .detail .d-date { font-size: 11.5px; }
-    .d-note { font-size: 16px; }  /* 16px avoids iOS zoom-on-focus */
-    .planning { gap: 12px; margin-top: 14px; }
-    .panel { padding: 15px 15px; border-radius: 13px; }
-    .panel h3 { font-size: 16px; }
-    .wish { padding: 10px 0; gap: 10px; }
-    .wish .ico { font-size: 19px; width: 26px; }
-    .wish .name { font-size: 13.5px; }
-    .wish .meta { font-size: 11px; }
-    footer { flex-wrap: wrap; gap: 10px; }
   }
 </style>
 </head>
@@ -201,7 +124,7 @@
 <div class="wrap">
   <header>
     <h1><span class="sun">&#9728;&#65039;</span> Summer 2026</h1>
-    <p class="sub">Your weekends from now through the Europe trip. Saturdays, Sundays &amp; holidays are shaded blue. Click any event to add a note or confirm a tentative plan — everything saves automatically.</p>
+    <p class="sub">Your weekends from now through the Europe trip. Saturdays, Sundays &amp; holidays are shaded blue.</p>
   </header>
 
   <div class="stats" id="stats"></div>
@@ -218,42 +141,12 @@
   </div>
 
   <div id="calendar"></div>
-
-  <div class="detail" id="detail"></div>
-
-  <div class="planning">
-    <div class="panel">
-      <h3>&#127881; Want to fit in</h3>
-      <p class="hint">The flexible stuff competing for your open time. Tap +/&minus; or check off as you lock things in.</p>
-      <div id="wishlist"></div>
-    </div>
-    <div class="panel">
-      <h3>&#128064; Reality check</h3>
-      <p class="hint">What the calendar is telling you about fitting everything in.</p>
-      <div id="insights"></div>
-    </div>
-  </div>
-
-  <footer>
-    <button id="reset">Reset all edits</button>
-    <span id="saved"></span>
-  </footer>
 </div>
 
 <script>
 const DAY = 86400000;
 const D = (y, m, d) => new Date(y, m - 1, d);
 const DEPART = D(2026, 9, 1); // Europe departure
-
-const CAT = {
-  free:     { label: "Open weekend" },
-  music:    { label: "Music / show" },
-  family:   { label: "Family" },
-  outdoors: { label: "Away / outdoors" },
-  social:   { label: "Friends" },
-  travel:   { label: "Away / travel" },
-  sports:   { label: "Sport" },
-};
 
 const EVENTS = [
   { id:"free-jun",   t:"Open weekend",            cat:"free",     status:"free",      s:D(2026,6,6),  e:D(2026,6,7) },
@@ -262,27 +155,24 @@ const EVENTS = [
   { id:"jazz-fest",  t:"🎷 Vancouver Jazz Fest",    cat:"music",    status:"confirmed", s:D(2026,6,19), e:D(2026,7,5),  ongoing:true, note:"Ongoing Jun 19–Jul 5 · not attending every night, but catching a few shows while it's on" },
   { id:"lb-trip",    t:"Long Beach",                               cat:"travel",   status:"confirmed", away:true,      s:D(2026,6,18), e:D(2026,6,21), note:"Thu night → Sun afternoon" },
   { id:"apocalypse", t:"Apocalypse",                    cat:"music",    status:"confirmed",                 s:D(2026,6,19), e:D(2026,6,20), note:"Long Beach, CA · Fri–Sat" },
-  { id:"camp-wt",    t:"Camping – Wendy Thompson", cat:"outdoors", status:"confirmed", away:true,      s:D(2026,6,27), e:D(2026,6,28), note:"With friends" },
+  { id:"camp-wt",    t:"Camping @ Wendy Thompson", cat:"outdoors", status:"confirmed", away:true,      s:D(2026,6,27), e:D(2026,6,28), note:"With friends" },
 
   { id:"fvded",      t:"FVDED",                   cat:"music",    status:"confirmed",                 s:D(2026,7,3),  e:D(2026,7,4),  note:"Festival" },
-  { id:"island-dad", t:"Courtenay – Dad",          cat:"family",   status:"confirmed", away:true,      s:D(2026,7,11), e:D(2026,7,12) },
+  { id:"island-dad", t:"Courtenay w/ Dad",          cat:"family",   status:"confirmed", away:true,      s:D(2026,7,11), e:D(2026,7,12) },
   { id:"free-jul",   t:"Open weekend",            cat:"free",     status:"free",                      s:D(2026,7,18), e:D(2026,7,19) },
   { id:"merina-yvr", t:"Merina in town",          cat:"social",   status:"confirmed", ongoing:true,   s:D(2026,7,23), e:D(2026,7,26), note:"In town Jul 23–26" },
   { id:"merina-stay",t:"Merina staying over",     cat:"social",   status:"confirmed",                 s:D(2026,7,24), e:D(2026,7,25), note:"Staying Fri + Sat nights" },
 
   { id:"cabin",      t:"Sevilla cabin",           cat:"outdoors", status:"tentative", away:true,      s:D(2026,8,1),  e:D(2026,8,3),  note:"Long weekend · BC Day Aug 3 · with friends" },
   { id:"isoxo",      t:"ISOXO @ PNE",             cat:"music",    status:"confirmed",                 s:D(2026,8,7),  e:D(2026,8,7) },
-  { id:"edmonton",   t:"Edmonton – visit Merina", cat:"travel",   status:"tentative", away:true,      s:D(2026,8,8),  e:D(2026,8,11), note:"Takes the Aug 8–9 weekend" },
+  { id:"edmonton",   t:"Edmonton w/ Merina", cat:"travel",   status:"tentative", away:true,      s:D(2026,8,8),  e:D(2026,8,11), note:"Takes the Aug 8–9 weekend" },
   { id:"vball-tourney", t:"Volleyball tournament",  cat:"sports",   status:"confirmed", s:D(2026,8,15), e:D(2026,8,15), note:"🏐 Confirmed! · Saturday only" },
   { id:"mom60",      t:"Mom's 60th",              cat:"family",   status:"tentative", s:D(2026,8,22), e:D(2026,8,23), note:"Family stuff" },
   { id:"strokes",    t:"The Strokes",             cat:"music",    status:"confirmed", s:D(2026,8,27), e:D(2026,8,27), note:"Vancouver" },
-  { id:"arcuri",     t:"Jeff Arcuri – comedy",    cat:"music",    status:"confirmed", s:D(2026,8,30), e:D(2026,8,30), note:"Stanley Park · pack for Malta!" },
+  { id:"arcuri",     t:"Jeff Arcuri show",    cat:"music",    status:"confirmed", s:D(2026,8,30), e:D(2026,8,30), note:"Stanley Park · pack for Malta!" },
   { id:"europe",     t:"Europe",                  cat:"travel",   status:"confirmed", away:true,      s:D(2026,9,1),  e:D(2026,9,21), note:"YVR → MLA Sep 1 · ZRH → YVR Sep 21" },
   { id:"wah-malta",  t:"WAH Malta",               cat:"music",    status:"confirmed", s:D(2026,9,4),  e:D(2026,9,6),  note:"DNB festival — the anchor of the trip. Uno Malta + Armier Beach + boat parties." },
 ];
-
-// Local-ish festival options from the festival-research doc — hidden behind a toggle (you're "probably not" doing any)
-const MAYBE_FESTS = [];
 
 const RANGE_START = D(2026, 6, 1);
 const RANGE_END = D(2026, 9, 30);
@@ -296,41 +186,8 @@ const HOLIDAYS = [
 ];
 const holidayFor = date => HOLIDAYS.find(h => sameDay(h.date, date)) || null;
 
-const WISHLIST = [
-  { id:"vball",   ico:"\u{1F3D0}", name:"Volleyball",            meta:"Every Wed & Sun · skip when away", type:"tag", tag:"weekly" },
-  { id:"vi",      ico:"\u{1F3D5}️", name:"Camping with Vi",       meta:"1–2 casual nights · weeknights totally fine",            type:"count", target:2 },
-  { id:"brohm",   ico:"\u{1F97E}", name:"Brohm",                 meta:"Aim 5–10× · weekdays ideal (early start)",                     type:"count", target:10 },
-  { id:"kelowna", ico:"\u{1F305}", name:"Kelowna family",        meta:"A few days, tbd · needs weekdays or a free weekend",            type:"check" },
-];
-
-const INSIGHTS = [
-  { mark:"\u{1F7E2}", text:"<b>2 fully open weekends left:</b> Jun 6–7 and Jul 18–19. Aug 16 (Sun) is also free after the tournament." },
-  { mark:"\u{1F525}", text:"<b>August is the crunch.</b> Five weekends, most already claimed, plus two weeknight shows and Malta packing on the 30th." },
-  { mark:"\u{1F3C6}", text:"<b>Volleyball tournament locked in for Aug 15–16.</b> ✓" },
-  { mark:"\u{1F305}", text:"<b>Kelowna has no home yet.</b> Easiest move: add weekdays around Jul 18–19, or trade it for Aug 15–16." },
-  { mark:"\u{1F97E}", text:"<b>Brohm is your weekday filler.</b> Weekends are tight, so plan early-AM weekday runs — lots of room Mon–Fri." },
-  { mark:"\u{1F3D5}️", text:"<b>Camping with Vi</b> slots into a weeknight, or onto Jun 6–7 / Jul 18–19 before they fill up." },
-];
-
-// ---- state ----
-const KEY = "summer2026.v2";
-let state = load();
-let selectedId = null;
-
-function load() { try { return JSON.parse(localStorage.getItem(KEY)) || base(); } catch { return base(); } }
-function base() {
-  const wl = {};
-  WISHLIST.forEach(w => { wl[w.id] = w.type === "count" ? 0 : false; });
-  return { status: {}, notes: {}, wish: wl };
-}
-function save() {
-  localStorage.setItem(KEY, JSON.stringify(state));
-  const el = document.getElementById("saved");
-  el.textContent = "Saved ✓  " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-}
-
-const statusOf = ev => state.status[ev.id] || ev.status;
-const noteOf = ev => (ev.id in state.notes) ? state.notes[ev.id] : (ev.note || "");
+// ---- helpers ----
+const statusOf = ev => ev.status;
 const dowMon = date => (date.getDay() + 6) % 7;
 const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 
@@ -372,47 +229,38 @@ function renderCalendar() {
   }
   document.getElementById("calendar").innerHTML =
     `<section class="cal"><div class="dow">${dow}</div><div class="weeks">${weeksHTML}</div></section>`;
-  document.querySelectorAll(".evbar").forEach(bar =>
-    bar.addEventListener("click", () => openDetail(bar.dataset.id)));
 }
 
 function renderWeek(weekStart, weekIndex) {
   const weekStartT = weekStart.getTime();
   const weekEndT = weekStartT + 6 * DAY;
 
-  const makeSeg = (ev, isFest) => {
+  const makeSeg = (ev) => {
     const evS = ev.s.getTime(), evE = ev.e.getTime();
     if (evS > weekEndT || evE < weekStartT) return null; // no overlap with this visible week
     const effStart = Math.max(evS, weekStartT);
     const effEnd = Math.min(evE, weekEndT);
     const colStart = Math.round((effStart - weekStartT) / DAY) + 1;
     const span = Math.round((effEnd - effStart) / DAY) + 1;
-    return { ev, isFest, colStart, colEnd: colStart + span - 1, span, clipL: evS < weekStartT, clipR: evE > weekEndT };
+    return { ev, colStart, colEnd: colStart + span - 1, span, clipL: evS < weekStartT, clipR: evE > weekEndT };
   };
 
-  const realSegs = [], festSegs = [];
-  EVENTS.forEach(ev => { if (ev.cat === "free") return; const s = makeSeg(ev, false); if (s) realSegs.push(s); });
-  if (state.showFests) MAYBE_FESTS.forEach(f => { const s = makeSeg(f, true); if (s) festSegs.push(s); });
+  const segs = [];
+  EVENTS.forEach(ev => { if (ev.cat === "free") return; const s = makeSeg(ev); if (s) segs.push(s); });
 
-  // lanes: real events take the top rows, maybe-fests stack beneath them
-  const assignLanes = (list, startLane) => {
-    list.sort((a, b) => a.colStart - b.colStart || b.span - a.span);
-    const lanes = [];
-    list.forEach(seg => {
-      let placed = false;
-      for (let i = 0; i < lanes.length; i++) {
-        if (lanes[i].every(o => seg.colStart > o.colEnd || seg.colEnd < o.colStart)) {
-          lanes[i].push(seg); seg.lane = startLane + i; placed = true; break;
-        }
+  // stack overlapping events into lanes
+  segs.sort((a, b) => a.colStart - b.colStart || b.span - a.span);
+  const lanes = [];
+  segs.forEach(seg => {
+    let placed = false;
+    for (let i = 0; i < lanes.length; i++) {
+      if (lanes[i].every(o => seg.colStart > o.colEnd || seg.colEnd < o.colStart)) {
+        lanes[i].push(seg); seg.lane = i; placed = true; break;
       }
-      if (!placed) { seg.lane = startLane + lanes.length; lanes.push([seg]); }
-    });
-    return lanes.length;
-  };
-  const realLaneCount = assignLanes(realSegs, 0);
-  const festLaneCount = assignLanes(festSegs, realLaneCount);
-  const segs = realSegs.concat(festSegs);
-  const maxLanes = Math.max(realLaneCount + festLaneCount, 2);
+    }
+    if (!placed) { seg.lane = lanes.length; lanes.push([seg]); }
+  });
+  const maxLanes = Math.max(lanes.length, 2);
 
   let cells = "", monthStarts = false;
   for (let i = 0; i < 7; i++) {
@@ -430,131 +278,19 @@ function renderWeek(weekStart, weekIndex) {
 
   let bars = "";
   segs.forEach(seg => {
-    const sel = seg.ev.id === selectedId ? "sel" : "";
     const clip = `${seg.clipL ? "clipL" : ""} ${seg.clipR ? "clipR" : ""}`;
-    if (seg.isFest) {
-      bars += `<div class="evbar fest ${clip} ${sel}" data-id="${seg.ev.id}" title="Maybe: ${seg.ev.t}" style="grid-column:${seg.colStart} / span ${seg.span};grid-row:${seg.lane + 2};">🎪 ${seg.ev.t}${seg.ev.star ? " ⭐" : ""}</div>`;
-    } else {
-      const st = statusOf(seg.ev);
-      const cls = `ev-${seg.ev.cat} ${st === "tentative" ? "tentative" : ""} ${seg.ev.ongoing ? "ongoing" : ""} ${clip} ${sel}`;
-      const prefix = st === "tentative" ? "◌ " : "";
-      bars += `<div class="evbar ${cls}" data-id="${seg.ev.id}" title="${seg.ev.t}" style="grid-column:${seg.colStart} / span ${seg.span};grid-row:${seg.lane + 2};">${prefix}${seg.ev.t}</div>`;
-    }
+    const st = statusOf(seg.ev);
+    const cls = `ev-${seg.ev.cat} ${st === "tentative" ? "tentative" : ""} ${seg.ev.ongoing ? "ongoing" : ""} ${clip}`;
+    const prefix = st === "tentative" ? "◌ " : "";
+    bars += `<div class="evbar ${cls}" title="${seg.ev.t}" style="grid-column:${seg.colStart} / span ${seg.span};grid-row:${seg.lane + 2};">${prefix}${seg.ev.t}</div>`;
   });
 
   const sep = (monthStarts && weekIndex > 0) ? "month-start" : "";
   return `<div class="week ${sep}" style="grid-template-rows:minmax(20px, auto) repeat(${maxLanes}, 22px);">${cells}${bars}</div>`;
 }
 
-// ---- detail panel ----
-function fmtRange(ev) {
-  const opt = { weekday: "short", month: "short", day: "numeric" };
-  if (sameDay(ev.s, ev.e)) return ev.s.toLocaleDateString("en-US", opt);
-  return ev.s.toLocaleDateString("en-US", opt) + " – " + ev.e.toLocaleDateString("en-US", opt);
-}
-
-function openDetail(id) {
-  selectedId = id;
-
-  const fest = MAYBE_FESTS.find(f => f.id === id);
-  if (fest) {
-    document.getElementById("detail").innerHTML = `
-      <div class="d-date">${fmtRange(fest)} · ${fest.loc}</div>
-      <div class="d-title">🎪 ${fest.t}${fest.star ? " ⭐" : ""} <span class="badge fest">Maybe</span> <span class="hint">${fest.lean}</span></div>
-      <div class="hint" style="margin:0 0 9px">${fest.note}</div>
-      <textarea class="d-note" rows="2" placeholder="Thoughts? (tickets, who's going, lean yes/no)…">${noteOf(fest)}</textarea>
-      <div class="d-actions"><span class="hint">From your festival-research doc · only shown while the toggle is on.</span></div>`;
-    const ta = document.querySelector(".d-note");
-    ta.addEventListener("input", () => { state.notes[id] = ta.value; save(); });
-    renderCalendar();
-    revealDetailOnMobile();
-    return;
-  }
-
-  const ev = EVENTS.find(e => e.id === id);
-  const st = statusOf(ev);
-  const badgeClass = st === "free" ? "free" : st === "tentative" ? "tentative" : st === "confirmed" && ev.cat === "travel" ? "travel" : st;
-  const badgeText = st === "free" ? "Open" : st;
-  const placeholder = ev.cat === "free" ? "This weekend's wide open — jot an idea (camping with Vi? volleyball tourney? Kelowna?)…" : "Add a note…";
-
-  let actions = "";
-  if (ev.status === "tentative") {
-    actions = st === "tentative"
-      ? `<button class="btn go" id="confirmBtn">✓ Confirm this plan</button><span class="hint" style="margin:0">Tentative — lock it in once you know.</span>`
-      : `<button class="btn undo" id="confirmBtn">↩ Set back to tentative</button><span class="hint" style="margin:0">Confirmed.</span>`;
-  }
-
-  document.getElementById("detail").innerHTML = `
-    <div class="d-date">${fmtRange(ev)}</div>
-    <div class="d-title">${ev.t} <span class="badge ${badgeClass}">${badgeText}</span> <span class="hint" style="margin:0">${CAT[ev.cat].label}</span></div>
-    <textarea class="d-note" rows="2" placeholder="${placeholder}">${noteOf(ev)}</textarea>
-    <div class="d-actions">${actions}</div>`;
-
-  const ta = document.querySelector(".d-note");
-  ta.addEventListener("input", () => { state.notes[id] = ta.value; save(); });
-  const btn = document.getElementById("confirmBtn");
-  if (btn) btn.addEventListener("click", () => {
-    state.status[id] = (statusOf(ev) === "tentative") ? "confirmed" : "tentative";
-    save(); renderStats(); renderCalendar(); openDetail(id);
-  });
-  renderCalendar();
-  revealDetailOnMobile();
-}
-
-function revealDetailOnMobile() {
-  if (window.matchMedia("(max-width: 560px)").matches) {
-    document.getElementById("detail").scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-}
-
-function renderDetailEmpty() {
-  document.getElementById("detail").innerHTML =
-    `<div class="empty">&#128205; Click any event above to see details, add a note, or confirm a tentative plan.</div>`;
-}
-
-// ---- wishlist ----
-function renderWishlist() {
-  document.getElementById("wishlist").innerHTML = WISHLIST.map(w => {
-    let ctrl = "";
-    if (w.type === "count") {
-      const v = state.wish[w.id] || 0;
-      ctrl = `<div class="counter" data-id="${w.id}"><button data-d="-1">&minus;</button><span class="val">${v} / ${w.target}</span><button data-d="1">+</button></div>`;
-    } else if (w.type === "check") {
-      ctrl = `<input type="checkbox" class="chk" data-id="${w.id}" ${state.wish[w.id] ? "checked" : ""} title="Mark as planned" />`;
-    } else {
-      ctrl = `<span class="tag">${w.tag}</span>`;
-    }
-    return `<div class="wish"><div class="ico">${w.ico}</div><div class="body"><div class="name">${w.name}</div><div class="meta">${w.meta}</div></div><div class="ctrl">${ctrl}</div></div>`;
-  }).join("");
-
-  document.querySelectorAll(".counter").forEach(c => {
-    const id = c.dataset.id;
-    c.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
-      state.wish[id] = Math.max(0, (state.wish[id] || 0) + parseInt(b.dataset.d, 10));
-      save(); renderWishlist();
-    }));
-  });
-  document.querySelectorAll(".chk").forEach(ch =>
-    ch.addEventListener("change", () => { state.wish[ch.dataset.id] = ch.checked; save(); }));
-}
-
-function renderInsights() {
-  document.getElementById("insights").innerHTML = INSIGHTS.map(i =>
-    `<div class="insight"><span class="mark">${i.mark}</span><span>${i.text}</span></div>`).join("");
-}
-
-document.getElementById("reset").addEventListener("click", () => {
-  if (confirm("Reset all edits back to the original plan?")) {
-    state = base(); selectedId = null;
-    localStorage.removeItem(KEY);
-    renderAll(); renderDetailEmpty();
-    document.getElementById("saved").textContent = "";
-  }
-});
-
-function renderAll() { renderStats(); renderCalendar(); renderWishlist(); renderInsights(); }
+function renderAll() { renderStats(); renderCalendar(); }
 renderAll();
-renderDetailEmpty();
 </script>
 </body>
 </html>
