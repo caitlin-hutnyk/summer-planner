@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#ffe0c2" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Summer 2026" />
+<title>Summer 2026 · Weekend Planner</title>
+<style>
+  :root {
+    --bg-1: #fff1e6; --bg-2: #ffe0c2; --bg-3: #cfe9ff;
+    --ink: #2b2b3a; --ink-soft: #6b6b80;
+    --line: #e7e7ef;
+    --free: #1faa6b; --free-bg: #e7f8ef; --free-line: #bfe9d3;
+    --tentative: #d68a00; --tentative-bg: #fff6e2;
+    --music: #e84a8a; --family: #f08a3c; --away: #4a86e8; --outdoors: var(--away); --social: #a688c8; --travel: var(--away); --sports: #16a34a;
+    --shadow: 0 6px 22px rgba(60, 50, 90, 0.10);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 38%, var(--bg-3) 100%);
+    background-attachment: fixed; min-height: 100vh; line-height: 1.45;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 60px; }
+  header h1 { margin: 0; font-size: 34px; letter-spacing: -0.5px; }
+  header .sun { font-size: 30px; }
+  header p.sub { margin: 6px 0 0; color: var(--ink-soft); font-size: 15px; max-width: 760px; }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 22px 0 8px; }
+  .stat {
+    background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow);
+  }
+  .stat .num { font-size: 26px; font-weight: 700; line-height: 1; }
+  .stat .lbl { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+
+  /* legend */
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0 8px; font-size: 12.5px; color: var(--ink-soft); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+  /* calendar */
+  .cal {
+    background: rgba(255,255,255,0.86); border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 16px; padding: 14px 16px 16px; box-shadow: var(--shadow); margin-bottom: 16px;
+  }
+  .cal h2 { margin: 2px 2px 12px; font-size: 20px; }
+  .dow { display: grid; grid-template-columns: repeat(7, 1fr); position: sticky; top: 0; z-index: 5; background: rgba(255,255,255,0.96); border-bottom: 1px solid var(--line); }
+  .dow-cell { font-size: 11px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .5px; padding: 4px 8px; }
+  .dow-cell.we { color: #2f7fb0; }
+
+  .weeks { display: flex; flex-direction: column; }
+  .week { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .daycell { border: 1px solid var(--line); background: #fff; min-height: 64px; overflow: hidden; }
+  .daycell.weekend, .daycell.holiday { background: #f4faff; }
+  .daycell.out { background: #fafafb; }
+  .daycell.out .daynum { color: #cdcdd8; }
+  .daycell.today { box-shadow: inset 0 0 0 2px var(--free); }
+  .daynum { display: inline-block; font-size: 11.5px; color: #9a9ab0; padding: 4px 7px; font-weight: 600; }
+  .daycell.weekend .daynum, .daycell.holiday .daynum { color: #2f7fb0; }
+  .holiday-name { display: inline-block; vertical-align: middle; font-size: 9px; color: #2f7fb0; font-weight: 700; text-transform: uppercase; letter-spacing: .2px; max-width: calc(100% - 30px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .month-tag { display: inline-block; vertical-align: middle; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .6px; color: #5b5b6e; padding-left: 7px; }
+  .daycell.first .daynum { padding-left: 3px; }
+  .week.month-start { border-top: 2px solid #c9c9d8; margin-top: 9px; }
+
+  .evbar {
+    margin: 1px 4px; border-radius: 7px; font-size: 11.5px; line-height: 1.5;
+    padding: 1px 8px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    cursor: pointer; z-index: 2; align-self: center; font-weight: 600;
+  }
+  .evbar:hover { filter: brightness(0.94); }
+  .evbar.clipL { border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: 0; }
+  .evbar.clipR { border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0; }
+  .evbar.sel { outline: 2px solid var(--ink); outline-offset: 1px; }
+
+  .ev-music    { background: var(--music); }
+  .ev-family   { background: var(--family); }
+  .ev-outdoors { background: var(--away); }
+  .ev-social   { background: var(--social); }
+  .ev-travel   { background: var(--away); }
+  .ev-sports   { background: var(--sports); }
+  .ev-free     { background: var(--free-bg); color: var(--free); border: 1px solid var(--free-line); }
+  .evbar.tentative { background: rgba(255,255,255,0.9) !important; border: 1.5px dashed currentColor; padding: 0 7px; }
+  .ev-music.tentative    { color: var(--music); }
+  .ev-family.tentative   { color: var(--family); }
+  .ev-outdoors.tentative { color: var(--away); }
+  .ev-social.tentative   { color: var(--social); }
+  .ev-travel.tentative   { color: var(--away); }
+  .ev-sports.tentative   { color: var(--sports); }
+  .evbar.fest { background: repeating-linear-gradient(45deg, #f3ebff, #f3ebff 5px, #e7d6ff 5px, #e7d6ff 10px); color: #6a3bbf; border: 1.5px dashed #b794f4; font-weight: 700; padding: 0 7px; }
+  .evbar.ongoing { background: transparent !important; border: none; border-bottom: 1.5px solid currentColor; border-radius: 0; margin: 0 4px 2px; padding: 0 3px; font-style: italic; font-weight: 400; }
+  .ev-music.ongoing    { color: var(--music); }
+  .ev-family.ongoing   { color: var(--family); }
+  .ev-outdoors.ongoing { color: var(--away); }
+  .ev-social.ongoing   { color: var(--social); }
+  .ev-travel.ongoing   { color: var(--away); }
+  .ev-sports.ongoing   { color: var(--sports); }
+
+  /* detail panel */
+  .detail {
+    background: rgba(255,255,255,0.86); border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 16px; padding: 16px 20px; box-shadow: var(--shadow); margin-top: 4px; min-height: 96px;
+  }
+  .detail .empty { color: var(--ink-soft); font-size: 13.5px; }
+  .detail .d-date { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
+  .detail .d-title { font-size: 19px; font-weight: 700; margin: 2px 0 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .badge { font-size: 10.5px; font-weight: 700; letter-spacing: .4px; padding: 3px 9px; border-radius: 999px; text-transform: uppercase; }
+  .badge.free { color: var(--free); background: var(--free-bg); }
+  .badge.tentative { color: var(--tentative); background: var(--tentative-bg); }
+  .badge.confirmed { color: var(--ink-soft); background: #f3f3f7; }
+  .badge.travel { color: var(--travel); background: #deeafc; }
+  .badge.fest { color: #6a3bbf; background: #efe6ff; }
+  .detail .hint { font-size: 12.5px; color: var(--ink-soft); line-height: 1.45; margin: 0; }
+  .d-note {
+    width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px;
+    font: inherit; font-size: 13px; resize: none; outline: none; color: var(--ink); background: #fff;
+  }
+  .d-note:focus { border-color: #c9c9da; }
+  .d-actions { margin-top: 10px; display: flex; gap: 10px; align-items: center; }
+  .btn {
+    border: 1px solid var(--line); background: #fff; border-radius: 9px;
+    padding: 7px 14px; font: inherit; font-size: 13px; cursor: pointer; color: var(--ink); font-weight: 600;
+  }
+  .btn:hover { background: #f5f5fa; }
+  .btn.go { background: var(--free); border-color: var(--free); color: #fff; }
+  .btn.go:hover { filter: brightness(0.95); background: var(--free); }
+  .btn.undo { color: var(--tentative); border-color: var(--tentative-bg); }
+
+  /* planning area */
+  .planning { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+  .panel {
+    background: rgba(255,255,255,0.82); border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 16px; padding: 18px 20px; box-shadow: var(--shadow);
+  }
+  .panel h3 { margin: 0 0 4px; font-size: 17px; }
+  .panel .hint { font-size: 12.5px; color: var(--ink-soft); margin: 0 0 14px; }
+  .wish { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .wish:last-child { border-bottom: none; }
+  .wish .ico { font-size: 22px; width: 30px; text-align: center; }
+  .wish .body { flex: 1; min-width: 0; }
+  .wish .name { font-weight: 600; font-size: 14.5px; }
+  .wish .meta { font-size: 12px; color: var(--ink-soft); }
+  .wish .ctrl { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .counter { display: flex; align-items: center; gap: 6px; }
+  .counter button { width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--line); background: #fff; font-size: 16px; cursor: pointer; line-height: 1; color: var(--ink); }
+  .counter button:hover { background: #f5f5fa; }
+  .counter .val { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 13.5px; min-width: 44px; text-align: center; }
+  .chk { width: 20px; height: 20px; accent-color: var(--free); cursor: pointer; }
+  .tag { font-size: 11px; font-weight: 700; color: var(--social); background: rgba(166,136,200,0.15); padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+  .insight { display: flex; gap: 10px; padding: 9px 0; font-size: 13px; }
+  .insight:not(:last-child) { border-bottom: 1px solid var(--line); }
+  .insight .mark { flex-shrink: 0; }
+
+  footer { margin-top: 24px; display: flex; align-items: center; gap: 14px; font-size: 12.5px; color: var(--ink-soft); }
+  footer button { border: 1px solid var(--line); background: #fff; border-radius: 9px; padding: 7px 13px; font: inherit; font-size: 12.5px; cursor: pointer; color: var(--ink); }
+  footer button:hover { background: #f5f5fa; }
+
+  @media (max-width: 720px) {
+    .planning { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .wrap { padding: 14px 9px 44px; }
+    header h1 { font-size: 25px; }
+    header .sun { font-size: 22px; }
+    header p.sub { font-size: 12.5px; line-height: 1.4; }
+    .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 16px 0 6px; }
+    .stat { padding: 11px 12px; border-radius: 12px; }
+    .stat .num { font-size: 20px; }
+    .stat .lbl { font-size: 10.5px; margin-top: 4px; }
+    .legend { gap: 8px 12px; font-size: 11px; margin: 12px 0 8px; }
+    .cal { padding: 7px 7px 9px; border-radius: 13px; }
+    .dow-cell { font-size: 8.5px; padding: 3px 1px; text-align: center; letter-spacing: .2px; }
+    .daycell { min-height: 58px; }
+    .daynum { font-size: 10px; padding: 3px 4px; }
+    .month-tag { font-size: 8px; padding-left: 3px; letter-spacing: .3px; }
+    .holiday-name { font-size: 7px; letter-spacing: 0; }
+    .evbar { font-size: 8.5px; padding: 0 3px; margin: 1px 1.5px; border-radius: 5px; line-height: 1.5; }
+    .detail { padding: 13px 14px; border-radius: 13px; }
+    .detail .d-title { font-size: 16px; gap: 7px; }
+    .detail .d-date { font-size: 11.5px; }
+    .d-note { font-size: 16px; }  /* 16px avoids iOS zoom-on-focus */
+    .planning { gap: 12px; margin-top: 14px; }
+    .panel { padding: 15px 15px; border-radius: 13px; }
+    .panel h3 { font-size: 16px; }
+    .wish { padding: 10px 0; gap: 10px; }
+    .wish .ico { font-size: 19px; width: 26px; }
+    .wish .name { font-size: 13.5px; }
+    .wish .meta { font-size: 11px; }
+    footer { flex-wrap: wrap; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="sun">&#9728;&#65039;</span> Summer 2026</h1>
+    <p class="sub">Your weekends from now through the Europe trip. Saturdays, Sundays &amp; holidays are shaded blue. Click any event to add a note or confirm a tentative plan — everything saves automatically.</p>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="legend">
+    <span><i class="dot" style="background:#dceeff;border:1px solid #b9dcf5"></i> Weekend / holiday</span>
+    <span><i class="dot" style="background:#fff;border:1.5px dashed var(--music)"></i> Tentative</span>
+    <span><i style="display:inline-block;width:20px;height:0;border-bottom:1.5px solid var(--social);vertical-align:middle"></i> Ongoing</span>
+    <span><i class="dot" style="background:var(--music)"></i> Music</span>
+    <span><i class="dot" style="background:var(--family)"></i> Family</span>
+    <span><i class="dot" style="background:var(--social)"></i> Friends</span>
+    <span><i class="dot" style="background:var(--sports)"></i> Sports</span>
+    <span><i class="dot" style="background:var(--away)"></i> Travel</span>
+  </div>
+
+  <div id="calendar"></div>
+
+  <div class="detail" id="detail"></div>
+
+  <div class="planning">
+    <div class="panel">
+      <h3>&#127881; Want to fit in</h3>
+      <p class="hint">The flexible stuff competing for your open time. Tap +/&minus; or check off as you lock things in.</p>
+      <div id="wishlist"></div>
+    </div>
+    <div class="panel">
+      <h3>&#128064; Reality check</h3>
+      <p class="hint">What the calendar is telling you about fitting everything in.</p>
+      <div id="insights"></div>
+    </div>
+  </div>
+
+  <footer>
+    <button id="reset">Reset all edits</button>
+    <span id="saved"></span>
+  </footer>
+</div>
+
+<script>
+const DAY = 86400000;
+const D = (y, m, d) => new Date(y, m - 1, d);
+const DEPART = D(2026, 9, 1); // Europe departure
+
+const CAT = {
+  free:     { label: "Open weekend" },
+  music:    { label: "Music / show" },
+  family:   { label: "Family" },
+  outdoors: { label: "Away / outdoors" },
+  social:   { label: "Friends" },
+  travel:   { label: "Away / travel" },
+  sports:   { label: "Sport" },
+};
+
+const EVENTS = [
+  { id:"free-jun",   t:"Open weekend",            cat:"free",     status:"free",      s:D(2026,6,6),  e:D(2026,6,7) },
+  { id:"sultan",     t:"Sultan + Shepard",        cat:"music",    status:"confirmed", s:D(2026,6,11), e:D(2026,6,11), note:"Thursday show" },
+  { id:"anson",      t:"Anson's birthday",        cat:"social",   status:"confirmed", s:D(2026,6,12), e:D(2026,6,12), note:"Birthday on the 12th" },
+  { id:"jazz-fest",  t:"🎷 Vancouver Jazz Fest",    cat:"music",    status:"confirmed", s:D(2026,6,19), e:D(2026,7,5),  ongoing:true, note:"Ongoing Jun 19–Jul 5 · not attending every night, but catching a few shows while it's on" },
+  { id:"lb-trip",    t:"Long Beach",                               cat:"travel",   status:"confirmed", away:true,      s:D(2026,6,18), e:D(2026,6,21), note:"Thu night → Sun afternoon" },
+  { id:"apocalypse", t:"Apocalypse",                    cat:"music",    status:"confirmed",                 s:D(2026,6,19), e:D(2026,6,20), note:"Long Beach, CA · Fri–Sat" },
+  { id:"camp-wt",    t:"Camping – Wendy Thompson", cat:"outdoors", status:"confirmed", away:true,      s:D(2026,6,27), e:D(2026,6,28), note:"With friends" },
+
+  { id:"fvded",      t:"FVDED",                   cat:"music",    status:"confirmed",                 s:D(2026,7,3),  e:D(2026,7,4),  note:"Festival" },
+  { id:"island-dad", t:"Courtenay – Dad",          cat:"family",   status:"confirmed", away:true,      s:D(2026,7,11), e:D(2026,7,12) },
+  { id:"free-jul",   t:"Open weekend",            cat:"free",     status:"free",                      s:D(2026,7,18), e:D(2026,7,19) },
+  { id:"merina-yvr", t:"Merina in town",          cat:"social",   status:"confirmed", ongoing:true,   s:D(2026,7,23), e:D(2026,7,26), note:"In town Jul 23–26" },
+  { id:"merina-stay",t:"Merina staying over",     cat:"social",   status:"confirmed",                 s:D(2026,7,24), e:D(2026,7,25), note:"Staying Fri + Sat nights" },
+
+  { id:"cabin",      t:"Sevilla cabin",           cat:"outdoors", status:"tentative", away:true,      s:D(2026,8,1),  e:D(2026,8,3),  note:"Long weekend · BC Day Aug 3 · with friends" },
+  { id:"isoxo",      t:"ISOXO @ PNE",             cat:"music",    status:"confirmed",                 s:D(2026,8,7),  e:D(2026,8,7) },
+  { id:"edmonton",   t:"Edmonton – visit Merina", cat:"travel",   status:"tentative", away:true,      s:D(2026,8,8),  e:D(2026,8,11), note:"Takes the Aug 8–9 weekend" },
+  { id:"vball-tourney", t:"Volleyball tournament",  cat:"sports",   status:"confirmed", s:D(2026,8,15), e:D(2026,8,15), note:"🏐 Confirmed! · Saturday only" },
+  { id:"mom60",      t:"Mom's 60th",              cat:"family",   status:"tentative", s:D(2026,8,22), e:D(2026,8,23), note:"Family stuff" },
+  { id:"strokes",    t:"The Strokes",             cat:"music",    status:"confirmed", s:D(2026,8,27), e:D(2026,8,27), note:"Vancouver" },
+  { id:"arcuri",     t:"Jeff Arcuri – comedy",    cat:"music",    status:"confirmed", s:D(2026,8,30), e:D(2026,8,30), note:"Stanley Park · pack for Malta!" },
+  { id:"europe",     t:"Europe",                  cat:"travel",   status:"confirmed", away:true,      s:D(2026,9,1),  e:D(2026,9,21), note:"YVR → MLA Sep 1 · ZRH → YVR Sep 21" },
+  { id:"wah-malta",  t:"WAH Malta",               cat:"music",    status:"confirmed", s:D(2026,9,4),  e:D(2026,9,6),  note:"DNB festival — the anchor of the trip. Uno Malta + Armier Beach + boat parties." },
+];
+
+// Local-ish festival options from the festival-research doc — hidden behind a toggle (you're "probably not" doing any)
+const MAYBE_FESTS = [];
+
+const RANGE_START = D(2026, 6, 1);
+const RANGE_END = D(2026, 9, 30);
+
+
+const HOLIDAYS = [
+  { name:"Canada Day",                                  short:"Canada Day",            date:D(2026,7,1) },
+  { name:"Civic Holiday",                               short:"Civic Holiday",         date:D(2026,8,3) },
+  { name:"Labour Day",                                  short:"Labour Day",            date:D(2026,9,7) },
+  { name:"National Day for Truth and Reconciliation",   short:"Truth & Reconciliation", date:D(2026,9,30) },
+];
+const holidayFor = date => HOLIDAYS.find(h => sameDay(h.date, date)) || null;
+
+const WISHLIST = [
+  { id:"vball",   ico:"\u{1F3D0}", name:"Volleyball",            meta:"Every Wed & Sun · skip when away", type:"tag", tag:"weekly" },
+  { id:"vi",      ico:"\u{1F3D5}️", name:"Camping with Vi",       meta:"1–2 casual nights · weeknights totally fine",            type:"count", target:2 },
+  { id:"brohm",   ico:"\u{1F97E}", name:"Brohm",                 meta:"Aim 5–10× · weekdays ideal (early start)",                     type:"count", target:10 },
+  { id:"kelowna", ico:"\u{1F305}", name:"Kelowna family",        meta:"A few days, tbd · needs weekdays or a free weekend",            type:"check" },
+];
+
+const INSIGHTS = [
+  { mark:"\u{1F7E2}", text:"<b>2 fully open weekends left:</b> Jun 6–7 and Jul 18–19. Aug 16 (Sun) is also free after the tournament." },
+  { mark:"\u{1F525}", text:"<b>August is the crunch.</b> Five weekends, most already claimed, plus two weeknight shows and Malta packing on the 30th." },
+  { mark:"\u{1F3C6}", text:"<b>Volleyball tournament locked in for Aug 15–16.</b> ✓" },
+  { mark:"\u{1F305}", text:"<b>Kelowna has no home yet.</b> Easiest move: add weekdays around Jul 18–19, or trade it for Aug 15–16." },
+  { mark:"\u{1F97E}", text:"<b>Brohm is your weekday filler.</b> Weekends are tight, so plan early-AM weekday runs — lots of room Mon–Fri." },
+  { mark:"\u{1F3D5}️", text:"<b>Camping with Vi</b> slots into a weeknight, or onto Jun 6–7 / Jul 18–19 before they fill up." },
+];
+
+// ---- state ----
+const KEY = "summer2026.v2";
+let state = load();
+let selectedId = null;
+
+function load() { try { return JSON.parse(localStorage.getItem(KEY)) || base(); } catch { return base(); } }
+function base() {
+  const wl = {};
+  WISHLIST.forEach(w => { wl[w.id] = w.type === "count" ? 0 : false; });
+  return { status: {}, notes: {}, wish: wl };
+}
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(state));
+  const el = document.getElementById("saved");
+  el.textContent = "Saved ✓  " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+const statusOf = ev => state.status[ev.id] || ev.status;
+const noteOf = ev => (ev.id in state.notes) ? state.notes[ev.id] : (ev.note || "");
+const dowMon = date => (date.getDay() + 6) % 7;
+const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+
+// ---- stats ----
+function renderStats() {
+  const today = new Date();
+  const days = Math.max(0, Math.ceil((DEPART - today) / DAY));
+  const open = EVENTS.filter(e => e.cat === "free").length;
+  const tent = EVENTS.filter(e => statusOf(e) === "tentative").length;
+  // Count Saturdays Jun–Sep 21; flag those overlapping an away:true event
+  const summerEnd = D(2026, 9, 21);
+  let totalWknds = 0, awayWknds = 0;
+  for (let d = new Date(RANGE_START); d <= summerEnd; d.setDate(d.getDate() + 1)) {
+    if (d.getDay() !== 6) continue;
+    totalWknds++;
+    if (EVENTS.some(ev => ev.away && ev.s <= d && ev.e >= d)) awayWknds++;
+  }
+  const stats = [
+    { num: days, lbl: "days until Europe ✈️" },
+    { num: `${awayWknds} / ${totalWknds}`, lbl: "weekends away Jun–Sep" },
+    { num: open, lbl: "fully open weekends" },
+    { num: tent, lbl: "tentative plans to confirm" },
+  ];
+  document.getElementById("stats").innerHTML = stats.map(s =>
+    `<div class="stat"><div class="num">${s.num}</div><div class="lbl">${s.lbl}</div></div>`).join("");
+}
+
+// ---- calendar ----
+function renderCalendar() {
+  const gridStart = new Date(RANGE_START); gridStart.setDate(RANGE_START.getDate() - dowMon(RANGE_START));
+  const gridEnd = new Date(RANGE_END); gridEnd.setDate(RANGE_END.getDate() + (6 - dowMon(RANGE_END)));
+
+  const dow = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    .map((d, i) => `<div class="dow-cell ${i >= 5 ? "we" : ""}">${d}</div>`).join("");
+
+  let weeksHTML = "", wi = 0;
+  for (let ws = new Date(gridStart); ws <= gridEnd; ws.setDate(ws.getDate() + 7)) {
+    weeksHTML += renderWeek(new Date(ws), wi++);
+  }
+  document.getElementById("calendar").innerHTML =
+    `<section class="cal"><div class="dow">${dow}</div><div class="weeks">${weeksHTML}</div></section>`;
+  document.querySelectorAll(".evbar").forEach(bar =>
+    bar.addEventListener("click", () => openDetail(bar.dataset.id)));
+}
+
+function renderWeek(weekStart, weekIndex) {
+  const weekStartT = weekStart.getTime();
+  const weekEndT = weekStartT + 6 * DAY;
+
+  const makeSeg = (ev, isFest) => {
+    const evS = ev.s.getTime(), evE = ev.e.getTime();
+    if (evS > weekEndT || evE < weekStartT) return null; // no overlap with this visible week
+    const effStart = Math.max(evS, weekStartT);
+    const effEnd = Math.min(evE, weekEndT);
+    const colStart = Math.round((effStart - weekStartT) / DAY) + 1;
+    const span = Math.round((effEnd - effStart) / DAY) + 1;
+    return { ev, isFest, colStart, colEnd: colStart + span - 1, span, clipL: evS < weekStartT, clipR: evE > weekEndT };
+  };
+
+  const realSegs = [], festSegs = [];
+  EVENTS.forEach(ev => { if (ev.cat === "free") return; const s = makeSeg(ev, false); if (s) realSegs.push(s); });
+  if (state.showFests) MAYBE_FESTS.forEach(f => { const s = makeSeg(f, true); if (s) festSegs.push(s); });
+
+  // lanes: real events take the top rows, maybe-fests stack beneath them
+  const assignLanes = (list, startLane) => {
+    list.sort((a, b) => a.colStart - b.colStart || b.span - a.span);
+    const lanes = [];
+    list.forEach(seg => {
+      let placed = false;
+      for (let i = 0; i < lanes.length; i++) {
+        if (lanes[i].every(o => seg.colStart > o.colEnd || seg.colEnd < o.colStart)) {
+          lanes[i].push(seg); seg.lane = startLane + i; placed = true; break;
+        }
+      }
+      if (!placed) { seg.lane = startLane + lanes.length; lanes.push([seg]); }
+    });
+    return lanes.length;
+  };
+  const realLaneCount = assignLanes(realSegs, 0);
+  const festLaneCount = assignLanes(festSegs, realLaneCount);
+  const segs = realSegs.concat(festSegs);
+  const maxLanes = Math.max(realLaneCount + festLaneCount, 2);
+
+  let cells = "", monthStarts = false;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart); d.setDate(weekStart.getDate() + i);
+    const out = d < RANGE_START || d > RANGE_END;
+    const we = i >= 5;
+    const today = sameDay(d, new Date());
+    const hol = holidayFor(d);
+    const isFirst = d.getDate() === 1 && !out;
+    if (isFirst) monthStarts = true;
+    const monthTag = isFirst ? `<span class="month-tag">${d.toLocaleString("en-US", { month: "short" })}</span>` : "";
+    const holLabel = (hol && !out) ? `<span class="holiday-name" title="${hol.name}">${hol.short}</span>` : "";
+    cells += `<div class="daycell ${we ? "weekend" : ""} ${hol ? "holiday" : ""} ${out ? "out" : ""} ${today ? "today" : ""} ${isFirst ? "first" : ""}" style="grid-column:${i + 1};grid-row:1 / -1;">${monthTag}<span class="daynum">${d.getDate()}</span>${holLabel}</div>`;
+  }
+
+  let bars = "";
+  segs.forEach(seg => {
+    const sel = seg.ev.id === selectedId ? "sel" : "";
+    const clip = `${seg.clipL ? "clipL" : ""} ${seg.clipR ? "clipR" : ""}`;
+    if (seg.isFest) {
+      bars += `<div class="evbar fest ${clip} ${sel}" data-id="${seg.ev.id}" title="Maybe: ${seg.ev.t}" style="grid-column:${seg.colStart} / span ${seg.span};grid-row:${seg.lane + 2};">🎪 ${seg.ev.t}${seg.ev.star ? " ⭐" : ""}</div>`;
+    } else {
+      const st = statusOf(seg.ev);
+      const cls = `ev-${seg.ev.cat} ${st === "tentative" ? "tentative" : ""} ${seg.ev.ongoing ? "ongoing" : ""} ${clip} ${sel}`;
+      const prefix = st === "tentative" ? "◌ " : "";
+      bars += `<div class="evbar ${cls}" data-id="${seg.ev.id}" title="${seg.ev.t}" style="grid-column:${seg.colStart} / span ${seg.span};grid-row:${seg.lane + 2};">${prefix}${seg.ev.t}</div>`;
+    }
+  });
+
+  const sep = (monthStarts && weekIndex > 0) ? "month-start" : "";
+  return `<div class="week ${sep}" style="grid-template-rows:minmax(20px, auto) repeat(${maxLanes}, 22px);">${cells}${bars}</div>`;
+}
+
+// ---- detail panel ----
+function fmtRange(ev) {
+  const opt = { weekday: "short", month: "short", day: "numeric" };
+  if (sameDay(ev.s, ev.e)) return ev.s.toLocaleDateString("en-US", opt);
+  return ev.s.toLocaleDateString("en-US", opt) + " – " + ev.e.toLocaleDateString("en-US", opt);
+}
+
+function openDetail(id) {
+  selectedId = id;
+
+  const fest = MAYBE_FESTS.find(f => f.id === id);
+  if (fest) {
+    document.getElementById("detail").innerHTML = `
+      <div class="d-date">${fmtRange(fest)} · ${fest.loc}</div>
+      <div class="d-title">🎪 ${fest.t}${fest.star ? " ⭐" : ""} <span class="badge fest">Maybe</span> <span class="hint">${fest.lean}</span></div>
+      <div class="hint" style="margin:0 0 9px">${fest.note}</div>
+      <textarea class="d-note" rows="2" placeholder="Thoughts? (tickets, who's going, lean yes/no)…">${noteOf(fest)}</textarea>
+      <div class="d-actions"><span class="hint">From your festival-research doc · only shown while the toggle is on.</span></div>`;
+    const ta = document.querySelector(".d-note");
+    ta.addEventListener("input", () => { state.notes[id] = ta.value; save(); });
+    renderCalendar();
+    revealDetailOnMobile();
+    return;
+  }
+
+  const ev = EVENTS.find(e => e.id === id);
+  const st = statusOf(ev);
+  const badgeClass = st === "free" ? "free" : st === "tentative" ? "tentative" : st === "confirmed" && ev.cat === "travel" ? "travel" : st;
+  const badgeText = st === "free" ? "Open" : st;
+  const placeholder = ev.cat === "free" ? "This weekend's wide open — jot an idea (camping with Vi? volleyball tourney? Kelowna?)…" : "Add a note…";
+
+  let actions = "";
+  if (ev.status === "tentative") {
+    actions = st === "tentative"
+      ? `<button class="btn go" id="confirmBtn">✓ Confirm this plan</button><span class="hint" style="margin:0">Tentative — lock it in once you know.</span>`
+      : `<button class="btn undo" id="confirmBtn">↩ Set back to tentative</button><span class="hint" style="margin:0">Confirmed.</span>`;
+  }
+
+  document.getElementById("detail").innerHTML = `
+    <div class="d-date">${fmtRange(ev)}</div>
+    <div class="d-title">${ev.t} <span class="badge ${badgeClass}">${badgeText}</span> <span class="hint" style="margin:0">${CAT[ev.cat].label}</span></div>
+    <textarea class="d-note" rows="2" placeholder="${placeholder}">${noteOf(ev)}</textarea>
+    <div class="d-actions">${actions}</div>`;
+
+  const ta = document.querySelector(".d-note");
+  ta.addEventListener("input", () => { state.notes[id] = ta.value; save(); });
+  const btn = document.getElementById("confirmBtn");
+  if (btn) btn.addEventListener("click", () => {
+    state.status[id] = (statusOf(ev) === "tentative") ? "confirmed" : "tentative";
+    save(); renderStats(); renderCalendar(); openDetail(id);
+  });
+  renderCalendar();
+  revealDetailOnMobile();
+}
+
+function revealDetailOnMobile() {
+  if (window.matchMedia("(max-width: 560px)").matches) {
+    document.getElementById("detail").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+function renderDetailEmpty() {
+  document.getElementById("detail").innerHTML =
+    `<div class="empty">&#128205; Click any event above to see details, add a note, or confirm a tentative plan.</div>`;
+}
+
+// ---- wishlist ----
+function renderWishlist() {
+  document.getElementById("wishlist").innerHTML = WISHLIST.map(w => {
+    let ctrl = "";
+    if (w.type === "count") {
+      const v = state.wish[w.id] || 0;
+      ctrl = `<div class="counter" data-id="${w.id}"><button data-d="-1">&minus;</button><span class="val">${v} / ${w.target}</span><button data-d="1">+</button></div>`;
+    } else if (w.type === "check") {
+      ctrl = `<input type="checkbox" class="chk" data-id="${w.id}" ${state.wish[w.id] ? "checked" : ""} title="Mark as planned" />`;
+    } else {
+      ctrl = `<span class="tag">${w.tag}</span>`;
+    }
+    return `<div class="wish"><div class="ico">${w.ico}</div><div class="body"><div class="name">${w.name}</div><div class="meta">${w.meta}</div></div><div class="ctrl">${ctrl}</div></div>`;
+  }).join("");
+
+  document.querySelectorAll(".counter").forEach(c => {
+    const id = c.dataset.id;
+    c.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+      state.wish[id] = Math.max(0, (state.wish[id] || 0) + parseInt(b.dataset.d, 10));
+      save(); renderWishlist();
+    }));
+  });
+  document.querySelectorAll(".chk").forEach(ch =>
+    ch.addEventListener("change", () => { state.wish[ch.dataset.id] = ch.checked; save(); }));
+}
+
+function renderInsights() {
+  document.getElementById("insights").innerHTML = INSIGHTS.map(i =>
+    `<div class="insight"><span class="mark">${i.mark}</span><span>${i.text}</span></div>`).join("");
+}
+
+document.getElementById("reset").addEventListener("click", () => {
+  if (confirm("Reset all edits back to the original plan?")) {
+    state = base(); selectedId = null;
+    localStorage.removeItem(KEY);
+    renderAll(); renderDetailEmpty();
+    document.getElementById("saved").textContent = "";
+  }
+});
+
+function renderAll() { renderStats(); renderCalendar(); renderWishlist(); renderInsights(); }
+renderAll();
+renderDetailEmpty();
+</script>
+</body>
+</html>
