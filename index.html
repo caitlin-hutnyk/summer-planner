@@ -155,6 +155,7 @@ const EVENTS = [
   { id:"free-jun",   t:"Open weekend",            cat:"free",     status:"free",      s:D(2026,6,6),  e:D(2026,6,7) },
   { id:"sultan",     t:"Sultan + Shepard",        cat:"music",    status:"tentative", s:D(2026,7,19), e:D(2026,7,19), note:"4pm" },
   { id:"anson",      t:"Anson's birthday",        cat:"social",   status:"confirmed", s:D(2026,6,12), e:D(2026,6,12), note:"Birthday on the 12th" },
+  { id:"brohm",      t:"Brohm Loop",               cat:"hike",     status:"confirmed",                 s:D(2026,6,13), e:D(2026,6,13) },
   { id:"jazz-fest",  t:"🎷 Vancouver Jazz Fest",    cat:"music",    status:"confirmed", s:D(2026,6,19), e:D(2026,7,5),  ongoing:true, note:"Ongoing Jun 19–Jul 5 · not attending every night, but catching a few shows while it's on" },
   { id:"lb-trip",    t:"Long Beach",                               cat:"travel",   status:"confirmed", away:true,      s:D(2026,6,18), e:D(2026,6,21), note:"Thu night → Sun afternoon" },
   { id:"apocalypse", t:"Apocalypse",                    cat:"music",    status:"confirmed",                 s:D(2026,6,19), e:D(2026,6,20), note:"Long Beach, CA · Fri–Sat" },
@@ -233,15 +234,22 @@ function renderCalendar() {
   const dow = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     .map((d, i) => `<div class="dow-cell ${i >= 5 ? "we" : ""}">${d}</div>`).join("");
 
-  let weeksHTML = "", wi = 0;
+  // Pass 1: lay out every week (assign lanes) and find the busiest lane count
+  const weeks = [];
+  let maxLanes = 2;
   for (let ws = new Date(gridStart); ws <= gridEnd; ws.setDate(ws.getDate() + 7)) {
-    weeksHTML += renderWeek(new Date(ws), wi++);
+    const w = layoutWeek(new Date(ws), weeks.length);
+    maxLanes = Math.max(maxLanes, w.laneCount);
+    weeks.push(w);
   }
+
+  // Pass 2: render every week with the same lane-row count so all cells share the max height
+  const weeksHTML = weeks.map(w => weekHTML(w, maxLanes)).join("");
   document.getElementById("calendar").innerHTML =
     `<section class="cal"><div class="dow">${dow}</div><div class="weeks">${weeksHTML}</div></section>`;
 }
 
-function renderWeek(weekStart, weekIndex) {
+function layoutWeek(weekStart, weekIndex) {
   const weekStartT = weekStart.getTime();
   const weekEndT = weekStartT + 6 * DAY;
 
@@ -270,7 +278,6 @@ function renderWeek(weekStart, weekIndex) {
     }
     if (!placed) { seg.lane = lanes.length; lanes.push([seg]); }
   });
-  const maxLanes = Math.max(lanes.length, 2);
 
   let cells = "", monthStarts = false;
   for (let i = 0; i < 7; i++) {
@@ -286,8 +293,12 @@ function renderWeek(weekStart, weekIndex) {
     cells += `<div class="daycell ${we ? "weekend" : ""} ${hol ? "holiday" : ""} ${out ? "out" : ""} ${today ? "today" : ""} ${isFirst ? "first" : ""}" style="grid-column:${i + 1};grid-row:1 / -1;">${monthTag}<span class="daynum">${d.getDate()}</span>${holLabel}</div>`;
   }
 
+  return { segs, cells, monthStarts, weekIndex, laneCount: lanes.length };
+}
+
+function weekHTML(w, maxLanes) {
   let bars = "";
-  segs.forEach(seg => {
+  w.segs.forEach(seg => {
     const clip = `${seg.clipL ? "clipL" : ""} ${seg.clipR ? "clipR" : ""}`;
     const st = statusOf(seg.ev);
     const cls = `ev-${seg.ev.cat} ${st === "tentative" ? "tentative" : ""} ${seg.ev.ongoing ? "ongoing" : ""} ${clip}`;
@@ -295,8 +306,8 @@ function renderWeek(weekStart, weekIndex) {
     bars += `<div class="evbar ${cls}" title="${seg.ev.t}" style="grid-column:${seg.colStart} / span ${seg.span};grid-row:${seg.lane + 2};">${prefix}${seg.ev.t}</div>`;
   });
 
-  const sep = (monthStarts && weekIndex > 0) ? "month-start" : "";
-  return `<div class="week ${sep}" style="grid-template-rows:minmax(20px, auto) repeat(${maxLanes}, 22px);">${cells}${bars}</div>`;
+  const sep = (w.monthStarts && w.weekIndex > 0) ? "month-start" : "";
+  return `<div class="week ${sep}" style="grid-template-rows:minmax(20px, auto) repeat(${maxLanes}, 22px);">${w.cells}${bars}</div>`;
 }
 
 function renderAll() { renderStats(); renderCalendar(); }
