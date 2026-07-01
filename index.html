@@ -16,7 +16,7 @@
     --line: #e7e7ef;
     --free: #1faa6b; --free-bg: #e7f8ef; --free-line: #bfe9d3;
     --tentative: #d68a00; --tentative-bg: #fff6e2;
-    --music: #e84a8a; --family: #f08a3c; --away: #4a86e8; --outdoors: var(--away); --social: #a688c8; --travel: var(--away); --sports: #16a34a;
+    --music: #e84a8a; --family: #f08a3c; --away: #4a86e8; --outdoors: var(--away); --social: #a688c8; --travel: var(--away); --sports: #f59e0b; --hike: #16a34a;
     --shadow: 0 6px 22px rgba(60, 50, 90, 0.10);
   }
   * { box-sizing: border-box; }
@@ -84,6 +84,7 @@
   .ev-social   { background: var(--social); }
   .ev-travel   { background: var(--away); }
   .ev-sports   { background: var(--sports); }
+  .ev-hike     { background: var(--hike); }
   .ev-free     { background: var(--free-bg); color: var(--free); border: 1px solid var(--free-line); }
   .evbar.tentative { background: rgba(255,255,255,0.9) !important; border: 1.5px dashed currentColor; padding: 0 7px; }
   .ev-music.tentative    { color: var(--music); }
@@ -92,6 +93,7 @@
   .ev-social.tentative   { color: var(--social); }
   .ev-travel.tentative   { color: var(--away); }
   .ev-sports.tentative   { color: var(--sports); }
+  .ev-hike.tentative     { color: var(--hike); }
   .evbar.ongoing { background: transparent !important; border: none; border-bottom: 1.5px solid currentColor; border-radius: 0; margin: 0 4px 2px; padding: 0 3px; font-style: italic; font-weight: 400; }
   .ev-music.ongoing    { color: var(--music); }
   .ev-family.ongoing   { color: var(--family); }
@@ -136,6 +138,7 @@
     <span><i style="display:inline-block;width:20px;height:0;border-bottom:1.5px solid var(--social);vertical-align:middle"></i> Ongoing</span>
     <span><i class="dot" style="background:var(--music)"></i> Music</span>
     <span><i class="dot" style="background:var(--social)"></i> Friends &amp; family</span>
+    <span><i class="dot" style="background:var(--hike)"></i> Hike</span>
     <span><i class="dot" style="background:var(--sports)"></i> Sports</span>
     <span><i class="dot" style="background:var(--away)"></i> Travel</span>
   </div>
@@ -155,20 +158,25 @@ const EVENTS = [
   { id:"jazz-fest",  t:"🎷 Vancouver Jazz Fest",    cat:"music",    status:"confirmed", s:D(2026,6,19), e:D(2026,7,5),  ongoing:true, note:"Ongoing Jun 19–Jul 5 · not attending every night, but catching a few shows while it's on" },
   { id:"lb-trip",    t:"Long Beach",                               cat:"travel",   status:"confirmed", away:true,      s:D(2026,6,18), e:D(2026,6,21), note:"Thu night → Sun afternoon" },
   { id:"apocalypse", t:"Apocalypse",                    cat:"music",    status:"confirmed",                 s:D(2026,6,19), e:D(2026,6,20), note:"Long Beach, CA · Fri–Sat" },
-  { id:"ydg",        t:"YDG @ Harbour",            cat:"music",    status:"tentative",             s:D(2026,6,26), e:D(2026,6,26) },
-  { id:"camp-wt",    t:"Camping @ Wendy Thompson", cat:"outdoors", status:"confirmed", away:true,      s:D(2026,6,27), e:D(2026,6,28), note:"With friends" },
+  { id:"camp-wt",    t:"Wendy Thompson Hut",       cat:"hike",     status:"confirmed", away:true,      s:D(2026,6,27), e:D(2026,6,28), note:"With friends · overnight hut trip" },
+  { id:"seymour",    t:"Mount Seymour",            cat:"hike",     status:"confirmed",                 s:D(2026,6,30), e:D(2026,6,30) },
 
-  { id:"nicola",     t:"Nicola arrives",           cat:"social",   status:"confirmed",                 s:D(2026,7,2),  e:D(2026,7,2) },
+  { id:"nicola",     t:"Nicola arrives",           cat:"social",   status:"confirmed", ongoing:true,   s:D(2026,7,2),  e:D(2026,7,2) },
   { id:"fvded",      t:"FVDED",                   cat:"music",    status:"confirmed",                 s:D(2026,7,3),  e:D(2026,7,4),  note:"Festival" },
+  { id:"needle",     t:"Needle Peak",              cat:"hike",     status:"tentative",                 s:D(2026,7,9),  e:D(2026,7,9) },
   { id:"island-dad", t:"Courtenay w/ Dad",          cat:"travel",   status:"confirmed", away:true,      s:D(2026,7,11), e:D(2026,7,13), note:"Back Monday morning" },
+  { id:"becher",     t:"Mt Becher",                cat:"hike",     status:"tentative",                 s:D(2026,7,12), e:D(2026,7,12), note:"Near Courtenay" },
+  { id:"gott",       t:"Gott Peak",                cat:"hike",     status:"tentative",                 s:D(2026,7,17), e:D(2026,7,18) },
   { id:"free-jul",   t:"Open weekend",            cat:"free",     status:"free",                      s:D(2026,7,18), e:D(2026,7,19) },
   { id:"merina-yvr", t:"Merina in town",          cat:"social",   status:"confirmed", ongoing:true,   s:D(2026,7,23), e:D(2026,7,26), note:"In town Jul 23–26" },
   { id:"merina-stay",t:"Merina staying over",     cat:"social",   status:"confirmed",                 s:D(2026,7,23), e:D(2026,7,24), note:"Thursday night + Friday together — Squamish?" },
+  { id:"harvey",     t:"Mt Harvey",                cat:"hike",     status:"tentative",                 s:D(2026,7,26), e:D(2026,7,26) },
 
   { id:"cabin",      t:"Sevilla cabin",           cat:"outdoors", status:"tentative", away:true,      s:D(2026,8,1),  e:D(2026,8,3),  note:"Long weekend · BC Day Aug 3 · with friends" },
   { id:"isoxo",      t:"ISOxo @ PNE",              cat:"music",    status:"confirmed",                 s:D(2026,8,7),  e:D(2026,8,7) },
   { id:"edmonton",   t:"Edmonton w/ Merina", cat:"travel",   status:"tentative", away:true,      s:D(2026,8,8),  e:D(2026,8,11), note:"Takes the Aug 8–9 weekend" },
-  { id:"vball-tourney", t:"Volleyball tournament",  cat:"sports",   status:"confirmed", s:D(2026,8,15), e:D(2026,8,15), note:"🏐 Confirmed! · Saturday only" },
+  { id:"spirit",     t:"Spirit Quest",             cat:"hike",     status:"tentative",                 s:D(2026,8,10), e:D(2026,8,10), note:"Squamish" },
+  { id:"vball-tourney", t:"Volleyball tournament",  cat:"sports",   status:"tentative", s:D(2026,8,15), e:D(2026,8,15), note:"🏐 Saturday only" },
   { id:"mom60",      t:"Mom's 60th",              cat:"social",   status:"tentative", s:D(2026,8,22), e:D(2026,8,23), note:"Family stuff" },
   { id:"strokes",    t:"The Strokes",             cat:"music",    status:"confirmed", s:D(2026,8,27), e:D(2026,8,27), note:"Vancouver" },
   { id:"arcuri",     t:"Jeff Arcuri show",    cat:"music",    status:"confirmed", s:D(2026,8,30), e:D(2026,8,30), note:"Stanley Park · pack for Malta!" },
