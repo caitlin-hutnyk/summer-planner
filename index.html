@@ -16,7 +16,7 @@
     --line: #e7e7ef;
     --free: #1faa6b; --free-bg: #e7f8ef; --free-line: #bfe9d3;
     --tentative: #d68a00; --tentative-bg: #fff6e2;
-    --music: #e84a8a; --family: #f08a3c; --away: #4a86e8; --outdoors: var(--away); --social: #a688c8; --travel: var(--away); --hike: #16a34a;
+    --music: #e84a8a; --family: #f08a3c; --away: #4a86e8; --hike: #16a34a; --outdoors: var(--hike); --social: #a688c8; --travel: var(--away);
     --shadow: 0 6px 22px rgba(60, 50, 90, 0.10);
   }
   * { box-sizing: border-box; }
@@ -80,7 +80,7 @@
 
   .ev-music    { background: var(--music); }
   .ev-family   { background: var(--family); }
-  .ev-outdoors { background: var(--away); }
+  .ev-outdoors { background: var(--outdoors); }
   .ev-social   { background: var(--social); }
   .ev-travel   { background: var(--away); }
   .ev-hike     { background: var(--hike); }
@@ -88,14 +88,14 @@
   .evbar.tentative { background: rgba(255,255,255,0.9) !important; border: 1.5px dashed currentColor; padding: 0 7px; }
   .ev-music.tentative    { color: var(--music); }
   .ev-family.tentative   { color: var(--family); }
-  .ev-outdoors.tentative { color: var(--away); }
+  .ev-outdoors.tentative { color: var(--outdoors); }
   .ev-social.tentative   { color: var(--social); }
   .ev-travel.tentative   { color: var(--away); }
   .ev-hike.tentative     { color: var(--hike); }
   .evbar.ongoing { background: transparent !important; border: none; border-bottom: 1.5px solid currentColor; border-radius: 0; margin: 0 4px 2px; padding: 0 3px; font-style: italic; font-weight: 400; }
   .ev-music.ongoing    { color: var(--music); }
   .ev-family.ongoing   { color: var(--family); }
-  .ev-outdoors.ongoing { color: var(--away); }
+  .ev-outdoors.ongoing { color: var(--outdoors); }
   .ev-social.ongoing   { color: var(--social); }
   .ev-travel.ongoing   { color: var(--away); }
 
