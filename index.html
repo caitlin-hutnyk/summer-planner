@@ -16,7 +16,7 @@
     --line: #e7e7ef;
     --free: #1faa6b; --free-bg: #e7f8ef; --free-line: #bfe9d3;
     --tentative: #d68a00; --tentative-bg: #fff6e2;
-    --music: #e84a8a; --family: #f08a3c; --away: #4a86e8; --outdoors: var(--away); --social: #a688c8; --travel: var(--away); --sports: #f59e0b; --hike: #16a34a;
+    --music: #e84a8a; --family: #f08a3c; --away: #4a86e8; --outdoors: var(--away); --social: #a688c8; --travel: var(--away); --hike: #16a34a;
     --shadow: 0 6px 22px rgba(60, 50, 90, 0.10);
   }
   * { box-sizing: border-box; }
@@ -83,7 +83,6 @@
   .ev-outdoors { background: var(--away); }
   .ev-social   { background: var(--social); }
   .ev-travel   { background: var(--away); }
-  .ev-sports   { background: var(--sports); }
   .ev-hike     { background: var(--hike); }
   .ev-free     { background: var(--free-bg); color: var(--free); border: 1px solid var(--free-line); }
   .evbar.tentative { background: rgba(255,255,255,0.9) !important; border: 1.5px dashed currentColor; padding: 0 7px; }
@@ -92,7 +91,6 @@
   .ev-outdoors.tentative { color: var(--away); }
   .ev-social.tentative   { color: var(--social); }
   .ev-travel.tentative   { color: var(--away); }
-  .ev-sports.tentative   { color: var(--sports); }
   .ev-hike.tentative     { color: var(--hike); }
   .evbar.ongoing { background: transparent !important; border: none; border-bottom: 1.5px solid currentColor; border-radius: 0; margin: 0 4px 2px; padding: 0 3px; font-style: italic; font-weight: 400; }
   .ev-music.ongoing    { color: var(--music); }
@@ -100,7 +98,6 @@
   .ev-outdoors.ongoing { color: var(--away); }
   .ev-social.ongoing   { color: var(--social); }
   .ev-travel.ongoing   { color: var(--away); }
-  .ev-sports.ongoing   { color: var(--sports); }
 
   @media (max-width: 560px) {
     body { -webkit-text-size-adjust: 100%; }
@@ -139,7 +136,6 @@
     <span><i class="dot" style="background:var(--music)"></i> Music</span>
     <span><i class="dot" style="background:var(--social)"></i> Friends &amp; family</span>
     <span><i class="dot" style="background:var(--hike)"></i> Hike</span>
-    <span><i class="dot" style="background:var(--sports)"></i> Sports</span>
     <span><i class="dot" style="background:var(--away)"></i> Travel</span>
   </div>
 
@@ -180,7 +176,7 @@ const EVENTS = [
   { id:"tolkien",    t:"Tolkien Range",            cat:"hike",     status:"tentative",                 s:D(2026,8,8),  e:D(2026,8,9),  note:"Alternative if bailing on Edmonton" },
   { id:"felix",      t:"Felix in town",            cat:"social",   status:"confirmed", ongoing:true,   s:D(2026,8,14), e:D(2026,8,26) },
   { id:"spirit",     t:"Spirit Quest",             cat:"hike",     status:"tentative",                 s:D(2026,8,10), e:D(2026,8,10), note:"Squamish" },
-  { id:"vball-tourney", t:"Volleyball tournament",  cat:"sports",   status:"tentative", s:D(2026,8,15), e:D(2026,8,15), note:"🏐 Saturday only" },
+  { id:"camp-felix", t:"Camp w/ Felix",           cat:"outdoors", status:"tentative", away:true,      s:D(2026,8,15), e:D(2026,8,16) },
   { id:"boston",     t:"Boston (work)",            cat:"travel",   status:"tentative", away:true,      s:D(2026,8,17), e:D(2026,8,21), note:"Possible work trip · Mon–Fri, no weekend overlap" },
   { id:"mom60",      t:"Mom's 60th",              cat:"social",   status:"tentative", s:D(2026,8,22), e:D(2026,8,23), note:"Family stuff" },
   { id:"strokes",    t:"The Strokes",             cat:"music",    status:"confirmed", s:D(2026,8,27), e:D(2026,8,27), note:"Vancouver" },
